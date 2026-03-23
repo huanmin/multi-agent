@@ -1,0 +1,256 @@
+# Gardener Agent Configuration
+
+agent:
+  name: gardener
+  version: 1.0.0
+  description: Automated codebase maintenance agent
+
+  # 智能体能力
+  capabilities:
+    - file_management
+    - dependency_analysis
+    - code_analysis
+    - reporting
+
+# 调度配置
+scheduling:
+  # 检查间隔
+  check_interval: 1h
+
+  # 批处理大小
+  batch_size: 100
+
+  # 并发限制
+  max_concurrent_tasks: 5
+
+# 生命周期策略
+lifecycle_policies:
+  # 文件生命周期
+  files:
+    draft:
+      # 草稿文件
+      patterns:
+        - "**/*.draft"
+        - "**/*.wip"
+        - "**/DRAFT-*"
+      ttl: 7d
+      action: notify
+      notification:
+        channels: [slack, email]
+        template: draft_expiring
+
+    stale:
+      # 过期文件
+      patterns:
+        - "**/*.old"
+        - "**/*.bak"
+        - "**/*.backup"
+      ttl: 30d
+      action: archive
+      archive_path: archive/stale/
+
+    deprecated:
+      # 废弃文件
+      patterns:
+        - "**/*.deprecated"
+        - "**/@deprecated/**"
+      ttl: 90d
+      action: delete
+      require_approval: true
+
+  # 分支生命周期
+  branches:
+    feature:
+      pattern: "feature/*"
+      ttl: 14d
+      merge_check: true
+      action: notify
+
+    hotfix:
+      pattern: "hotfix/*"
+      ttl: 7d
+      merge_check: true
+      action: auto_delete
+
+    stale:
+      # 无活动分支
+      inactive_days: 30
+      action: archive
+      archive_prefix: "archived/"
+
+  # 依赖生命周期
+  dependencies:
+    unused:
+      ttl: 14d
+      action: notify
+      auto_remove: false
+
+    outdated:
+      ttl: 30d
+      action: notify
+      auto_update: false
+      security_critical: true
+
+# 清理规则
+cleanup_rules:
+  # 文件清理
+  files:
+    - name: remove_empty_directories
+      enabled: true
+      schedule: daily
+      dry_run: false
+
+    - name: remove_duplicate_files
+      enabled: true
+      schedule: weekly
+      threshold: 0.95  # 相似度阈值
+      dry_run: false
+
+    - name: compress_old_logs
+      enabled: true
+      schedule: daily
+      max_age: 7d
+      compression: gzip
+
+    - name: remove_temp_files
+      enabled: true
+      schedule: daily
+      patterns:
+        - "**/*.tmp"
+        - "**/*.temp"
+        - "**/*.swp"
+
+  # 代码清理
+  code:
+    - name: remove_dead_code
+      enabled: true
+      schedule: weekly
+      confidence_threshold: 0.9
+      require_approval: true
+
+    - name: remove_unused_imports
+      enabled: true
+      schedule: daily
+      auto_fix: true
+
+    - name: remove_console_logs
+      enabled: true
+      schedule: daily
+      patterns:
+        - "console.log"
+        - "console.debug"
+      exclude:
+        - "**/*.test.ts"
+        - "**/*.spec.ts"
+
+# 分析配置
+analysis:
+  # 死代码检测
+  dead_code:
+    enabled: true
+    methods:
+      - static_analysis
+      - usage_tracking
+      - dependency_graph
+
+    exclude:
+      - "**/*.test.ts"
+      - "**/*.spec.ts"
+      - "**/tests/**"
+
+  # 未使用依赖检测
+  unused_dependencies:
+    enabled: true
+    check_dev_dependencies: true
+    check_peer_dependencies: true
+
+  # 重复代码检测
+  duplicate_code:
+    enabled: true
+    min_lines: 10
+    min_similarity: 0.8
+
+# 报告配置
+reporting:
+  # 输出目录
+  output_dir: reports/gardener
+
+  # 报告格式
+  formats:
+    - json
+    - markdown
+    - html
+
+  # 报告内容
+  include:
+    - summary
+    - details
+    - recommendations
+    - metrics
+
+  # 保留历史
+  history:
+    enabled: true
+    retention: 90d
+
+# 通知配置
+notifications:
+  # Slack 通知
+  slack:
+    enabled: false
+    webhook_url: ${SLACK_WEBHOOK_URL}
+    channel: "#engineering"
+
+  # 邮件通知
+  email:
+    enabled: false
+    recipients:
+      - engineering@example.com
+
+  # 事件触发
+  events:
+    - cleanup_completed
+    - cleanup_failed
+    - stale_detected
+    - security_issue
+
+# 安全配置
+security:
+  # 敏感文件保护
+  protected_patterns:
+    - ".env*"
+    - "**/secrets/**"
+    - "**/credentials/**"
+    - "**/keys/**"
+
+  # 需要审批的操作
+  require_approval:
+    - delete_files
+    - remove_dependencies
+    - force_push
+
+  # 审批超时
+  approval_timeout: 7d
+
+# 指标配置
+metrics:
+  enabled: true
+  port: 9091
+  path: /metrics
+
+  custom_metrics:
+    - name: gc_items_collected
+      type: counter
+      labels: [type, action]
+
+    - name: gc_stale_files
+      type: gauge
+      labels: [category, age_bucket]
+
+    - name: gc_cleanup_duration_seconds
+      type: histogram
+      labels: [operation]
+
+    - name: gc_health_score
+      type: gauge
+      description: Overall codebase health score (0-100)

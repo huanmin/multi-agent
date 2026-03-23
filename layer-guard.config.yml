@@ -1,0 +1,84 @@
+# Layer Guard 配置
+# 分层架构约束检查
+
+layers:
+  # 定义架构层次
+  - name: presentation
+    description: 表现层 - 处理用户交互和 API 接口
+    paths:
+      - src/presentation/**
+    allowed_deps:
+      - application
+    forbidden_deps:
+      - domain
+      - infrastructure
+
+  - name: application
+    description: 应用层 - 协调用例和业务流程
+    paths:
+      - src/application/**
+    allowed_deps:
+      - domain
+    forbidden_deps:
+      - presentation
+      - infrastructure
+
+  - name: domain
+    description: 领域层 - 核心业务逻辑
+    paths:
+      - src/domain/**
+    allowed_deps: []
+    forbidden_deps:
+      - presentation
+      - application
+      - infrastructure
+
+  - name: infrastructure
+    description: 基础设施层 - 外部依赖和工具
+    paths:
+      - src/infrastructure/**
+    allowed_deps:
+      - domain
+    forbidden_deps:
+      - presentation
+      - application
+
+rules:
+  # 依赖方向规则
+  dependency_direction:
+    enabled: true
+    message: "依赖方向违规: {{from}} -> {{to}}"
+
+  # 循环依赖检测
+  circular_dependency:
+    enabled: true
+    severity: error
+    message: "检测到循环依赖: {{cycle}}"
+
+  # 接口隔离
+  interface_segregation:
+    enabled: true
+    pattern: "**/interfaces/**"
+    message: "接口文件应放在 interfaces 目录"
+
+  # 测试隔离
+  test_isolation:
+    enabled: true
+    test_paths:
+      - tests/**
+      - "**/*.test.ts"
+      - "**/*.spec.ts"
+    allow_import_from: "*"
+
+reports:
+  # 报告输出配置
+  output_dir: reports/layer-guard
+  formats:
+    - json
+    - html
+  include_source: true
+
+# CI 集成
+ci:
+  fail_on_error: true
+  annotations: true

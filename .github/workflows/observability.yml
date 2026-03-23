@@ -1,0 +1,50 @@
+name: Observability Stack
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 每天检查可观测性栈健康状态
+    - cron: '0 */6 * * *'
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Prometheus
+        run: |
+          curl -f http://localhost:9090/-/healthy || echo "Prometheus not available"
+
+      - name: Check Grafana
+        run: |
+          curl -f http://localhost:3000/api/health || echo "Grafana not available"
+
+      - name: Check Loki
+        run: |
+          curl -f http://localhost:3100/ready || echo "Loki not available"
+
+      - name: Check Jaeger
+        run: |
+          curl -f http://localhost:16686/health || echo "Jaeger not available"
+
+  collect-metrics:
+    runs-on: ubuntu-latest
+    needs: health-check
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Collect Metrics
+        run: |
+          # 收集 Prometheus 指标
+          curl http://localhost:9090/api/v1/query?query=up > metrics/up.json || true
+
+          # 收集告警状态
+          curl http://localhost:9090/api/v1/alerts > metrics/alerts.json || true
+
+      - name: Upload Metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: observability-metrics
+          path: metrics/

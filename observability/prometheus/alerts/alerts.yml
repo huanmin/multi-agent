@@ -1,0 +1,136 @@
+groups:
+  - name: agent_alerts
+    interval: 30s
+    rules:
+      # 错误率告警
+      - alert: HighErrorRate
+        expr: rate(agent_errors_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          category: agent
+        annotations:
+          summary: "High error rate detected for agent {{ $labels.agent }}"
+          description: "Error rate is {{ $value }} errors/sec over the last 5 minutes"
+
+      - alert: CriticalErrorRate
+        expr: rate(agent_errors_total[5m]) > 1
+        for: 2m
+        labels:
+          severity: critical
+          category: agent
+        annotations:
+          summary: "Critical error rate for agent {{ $labels.agent }}"
+          description: "Error rate is {{ $value }} errors/sec - immediate attention required"
+
+      # 延迟告警
+      - alert: HighLatency
+        expr: histogram_quantile(0.95, rate(agent_request_duration_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "High latency detected"
+          description: "P95 latency is {{ $value }}s for {{ $labels.agent }}"
+
+      # 上下文窗口告警
+      - alert: ContextWindowExhaustion
+        expr: agent_context_utilization > 0.9
+        for: 2m
+        labels:
+          severity: critical
+          category: context
+        annotations:
+          summary: "Context window near exhaustion for {{ $labels.agent }}"
+          description: "Context utilization at {{ $value }}"
+
+      - alert: ContextWindowWarning
+        expr: agent_context_utilization > 0.75
+        for: 5m
+        labels:
+          severity: warning
+          category: context
+        annotations:
+          summary: "Context window utilization high for {{ $labels.agent }}"
+          description: "Context utilization at {{ $value }}"
+
+  - name: architectural_constraints_alerts
+    interval: 1m
+    rules:
+      # 架构违规告警
+      - alert: LayerViolationDetected
+        expr: increase(layer_violation_total[1h]) > 10
+        labels:
+          severity: warning
+          category: architecture
+        annotations:
+          summary: "Layer violations detected"
+          description: "{{ $value }} layer violations in the last hour"
+
+      - alert: LintErrorsIncreasing
+        expr: increase(lint_errors_total[1h]) > 50
+        labels:
+          severity: warning
+          category: code_quality
+        annotations:
+          summary: "Increasing lint errors"
+          description: "{{ $value }} lint errors in the last hour"
+
+      - alert: TypeCheckErrors
+        expr: type_check_errors > 0
+        for: 5m
+        labels:
+          severity: warning
+          category: code_quality
+        annotations:
+          summary: "Type check errors detected"
+          description: "{{ $value }} type check errors"
+
+  - name: garbage_collection_alerts
+    interval: 5m
+    rules:
+      # 垃圾回收告警
+      - alert: HighStaleFiles
+        expr: gc_stale_files > 100
+        for: 10m
+        labels:
+          severity: info
+          category: maintenance
+        annotations:
+          summary: "High number of stale files"
+          description: "{{ $value }} stale files detected - consider running cleanup"
+
+      - alert: GarbageCollectionFailure
+        expr: rate(gc_items_collected{action="error"}[1h]) > 0
+        for: 5m
+        labels:
+          severity: warning
+          category: maintenance
+        annotations:
+          summary: "Garbage collection failures"
+          description: "GC is experiencing failures for {{ $labels.type }}"
+
+  - name: observability_alerts
+    interval: 30s
+    rules:
+      # 可观测性栈健康检查
+      - alert: PrometheusDown
+        expr: up{job="prometheus"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: infrastructure
+        annotations:
+          summary: "Prometheus is down"
+          description: "Prometheus instance is unreachable"
+
+      - alert: LokiDown
+        expr: up{job="loki"} == 0
+        for: 1m
+        labels:
+          severity: warning
+          category: infrastructure
+        annotations:
+          summary: "Loki is down"
+          description: "Loki instance is unreachable - logs may be lost"
