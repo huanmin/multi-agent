@@ -48,3 +48,5 @@ reports/
 observability/prometheus/data/
 observability/grafana/data/
 observability/loki/data//src-tauri/target
+/src-tauri/target
+/src-tauri/gen
