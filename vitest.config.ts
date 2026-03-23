@@ -4,8 +4,8 @@ import path from 'path';
 export default defineConfig({
   test: {
     globals: true,
-    environment: 'node',
-    include: ['tests/**/*.{test,spec}.{js,ts}'],
+    environment: 'jsdom',
+    include: ['tests/**/*.{test,spec}.{js,ts,tsx}'],
     exclude: ['tests/e2e/**', 'node_modules', 'dist'],
     coverage: {
       provider: 'v8',
@@ -13,6 +13,7 @@ export default defineConfig({
       exclude: [
         'node_modules/',
         'tests/',
+        'src-tauri/',
         '**/*.d.ts',
         '**/*.config.ts',
         '**/index.ts',

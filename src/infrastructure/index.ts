@@ -4,9 +4,6 @@
  * 实现领域层定义的接口，提供技术支持
  */
 
-// 基础设施层依赖领域层（依赖反转）
-import type { Entity, Repository } from '@domain';
-
 /**
  * 基础设施配置
  */
@@ -34,31 +31,6 @@ export interface MessagingConfig {
 }
 
 /**
- * 仓储实现
- */
-export class RepositoryImpl<T extends Entity> implements Repository<T> {
-  constructor(private readonly config: DatabaseConfig) {}
-
-  async findById(id: string): Promise<T | null> {
-    // 数据库查询实现
-    return null;
-  }
-
-  async findAll(): Promise<T[]> {
-    // 数据库查询实现
-    return [];
-  }
-
-  async save(entity: T): Promise<void> {
-    // 数据库保存实现
-  }
-
-  async delete(id: string): Promise<void> {
-    // 数据库删除实现
-  }
-}
-
-/**
  * 可观测性客户端
  */
 export class ObservabilityClient {
@@ -72,20 +44,20 @@ export class ObservabilityClient {
     this.logsEnabled = config.logs;
   }
 
-  recordMetric(name: string, value: number, labels?: Record<string, string>): void {
+  recordMetric(_name: string, _value: number, _labels?: Record<string, string>): void {
     if (this.metricsEnabled) {
       // Prometheus 指标记录
     }
   }
 
-  startSpan(name: string): Span {
+  startSpan(_name: string): Span {
     if (this.tracesEnabled) {
       // OpenTelemetry Span
     }
     return new NoopSpan();
   }
 
-  log(level: string, message: string, context?: Record<string, unknown>): void {
+  log(_level: string, _message: string, _context?: Record<string, unknown>): void {
     if (this.logsEnabled) {
       // 结构化日志
     }

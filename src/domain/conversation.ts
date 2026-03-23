@@ -47,7 +47,7 @@ export class Message implements ValueObject {
     this.id = params.id || this.generateId();
     this.role = params.role;
     this.content = params.content;
-    this.expertId = params.expertId;
+    this.expertId = params.expertId || '';  // Provide default empty string to fix strict null checks
     this.mentions = params.mentions || [];
     this.inputTokens = 0;
     this.outputTokens = 0;

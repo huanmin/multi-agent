@@ -4,9 +4,6 @@
  * 处理外部请求和响应
  */
 
-// 表现层仅依赖应用层
-import type { UseCase } from '@application/use-case';
-
 export interface Presenter<T> {
   present(data: T): Response;
 }
@@ -22,11 +19,9 @@ export interface Response {
 /**
  * API 控制器
  */
-export class Controller {
-  constructor(private readonly useCase: UseCase) {}
-
-  async handle(request: Request): Promise<Response> {
-    // 转换请求 -> 调用用例 -> 转换响应
-    return this.useCase.execute(request);
+export class Controller<TInput = unknown, TOutput = unknown> {
+  async handle(request: TInput): Promise<TOutput> {
+    console.log('Handling request:', request);
+    throw new Error('Not implemented');
   }
 }

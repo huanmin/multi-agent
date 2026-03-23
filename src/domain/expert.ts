@@ -63,15 +63,15 @@ export class ExpertRole implements ValueObject {
  * 专家创建参数
  */
 export interface CreateExpertParams {
-  id?: string;
+  id?: string | undefined;
   name: string;
   role: ExpertRole;
   systemPrompt: string;
-  avatar?: string;
-  tags?: string[];
-  isBuiltin?: boolean;
-  temperature?: number;
-  maxTokens?: number;
+  avatar?: string | undefined;
+  tags?: string[] | undefined;
+  isBuiltin?: boolean | undefined;
+  temperature?: number | undefined;
+  maxTokens?: number | undefined;
 }
 
 /**
@@ -135,20 +135,21 @@ export class Expert implements Entity {
    * 从 JSON 恢复专家
    */
   static fromJSON(json: Record<string, unknown>): Expert {
+    const roleData = json.role as Record<string, string | undefined>;
     return new Expert({
-      id: json.id as string,
+      id: json.id as string | undefined,
       name: json.name as string,
       role: new ExpertRole(
-        (json.role as Record<string, string>).code,
-        (json.role as Record<string, string>).name,
-        (json.role as Record<string, string>).description
+        roleData.code || '',
+        roleData.name || '',
+        roleData.description || ''
       ),
       systemPrompt: json.systemPrompt as string,
-      avatar: json.avatar as string,
-      tags: json.tags as string[],
-      isBuiltin: json.isBuiltin as boolean,
-      temperature: json.temperature as number,
-      maxTokens: json.maxTokens as number,
+      avatar: json.avatar as string | undefined,
+      tags: json.tags as string[] | undefined,
+      isBuiltin: json.isBuiltin as boolean | undefined,
+      temperature: json.temperature as number | undefined,
+      maxTokens: json.maxTokens as number | undefined,
     });
   }
 

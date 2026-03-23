@@ -103,7 +103,7 @@ export class DashboardStats implements ValueObject {
    */
   static aggregateByRange(
     dailyStats: Array<{ date: string; tasks?: number; tokens?: number }>,
-    range: TimeRange
+    _range: TimeRange
   ): { totalTasks: number; totalTokens: number; avgPerDay: number } {
     const totalTasks = dailyStats.reduce((sum, s) => sum + (s.tasks || 0), 0);
     const totalTokens = dailyStats.reduce((sum, s) => sum + (s.tokens || 0), 0);
