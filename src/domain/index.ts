@@ -4,6 +4,10 @@
  * 核心业务逻辑，不依赖任何外层
  */
 
+export * from './expert';
+export * from './conversation';
+export * from './dashboard';
+
 /**
  * 实体接口
  */

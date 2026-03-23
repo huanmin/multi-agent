@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-tint": "#2fd9f4",
+              "on-error-container": "#ffdad6",
+              "secondary-container": "#3c4a5e",
+              "on-secondary-fixed-variant": "#3a485c",
+              "error": "#ffb4ab",
+              "surface-container-lowest": "#060e20",
+              "tertiary-fixed-dim": "#ffb957",
+              "surface-dim": "#0b1326",
+              "on-primary-fixed": "#001f25",
+              "on-tertiary-fixed-variant": "#643f00",
+              "on-tertiary": "#462b00",
+              "on-primary-fixed-variant": "#004e5a",
+              "surface-container-low": "#131b2e",
+              "outline-variant": "#3c494c",
+              "primary": "#8aebff",
+              "on-primary-container": "#005763",
+              "on-secondary-fixed": "#0d1c2f",
+              "secondary": "#b9c7e0",
+              "on-tertiary-fixed": "#2a1800",
+              "surface-container-high": "#222a3d",
+              "secondary-fixed-dim": "#b9c7e0",
+              "on-surface": "#dae2fd",
+              "tertiary-fixed": "#ffddb5",
+              "inverse-primary": "#006877",
+              "surface-bright": "#31394d",
+              "primary-fixed-dim": "#2fd9f4",
+              "secondary-fixed": "#d5e3fd",
+              "on-primary": "#00363e",
+              "inverse-on-surface": "#283044",
+              "outline": "#859397",
+              "on-secondary-container": "#abb9d2",
+              "on-error": "#690005",
+              "error-container": "#93000a",
+              "on-surface-variant": "#bbc9cd",
+              "primary-container": "#22d3ee",
+              "background": "#0b1326",
+              "surface-container-highest": "#2d3449",
+              "surface": "#0b1326",
+              "tertiary": "#ffd6a3",
+              "surface-container": "#171f33",
+              "primary-fixed": "#a2eeff",
+              "on-tertiary-container": "#6e4600",
+              "tertiary-container": "#ffb13b",
+              "surface-variant": "#2d3449",
+              "on-background": "#dae2fd",
+              "inverse-surface": "#dae2fd",
+              "on-secondary": "#233144"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            backdrop-filter: blur(12px);
+            background: rgba(19, 27, 46, 0.7);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0b1326;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #31394d;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex items-center justify-center min-h-screen p-0 m-0">
+<!-- Mobile Device Container (iPhone 15 Pro) -->
+<div class="relative w-[393px] h-[852px] bg-background overflow-hidden flex flex-col shadow-2xl border border-white/5">
+<!-- Grid Texture Background -->
+<div class="absolute inset-0 pointer-events-none opacity-5" style="background-image: radial-gradient(circle, #859397 1px, transparent 1px); background-size: 24px 24px;"></div>
+<!-- TopAppBar (Shared Component) -->
+<header class="fixed top-0 w-[393px] z-50 bg-[#0b1326]/60 backdrop-blur-xl h-16 flex justify-between items-center px-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-cyan-400" data-icon="terminal">terminal</span>
+<h1 class="text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)] font-['Space_Grotesk'] text-lg tracking-widest font-bold">NEURAL WEAVER</h1>
+</div>
+<div class="w-8 h-8 rounded-full border border-cyan-400/30 p-0.5">
+<img alt="User Profile" class="w-full h-full rounded-full object-cover" data-alt="Cyberpunk style user avatar profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3587r0rh_-YYERFA3lCTYod0VXXH9ivsdU2TPE36pUhgBs065hYoNm0OYRig9pZUrX8KLe4RoSo5hR_NBxVrZ7sTPR3KqbeLcPmvNupIatD3a0LY7t3fw-R3EpII7La-HT3vkEAr3vRlN-sexsX62xdPBJV-A_BDpP9m5uJk1DqHU9A0qAm2AipgJuy8ssa5HHYSnK_oR3egw2HAUEWNLs79bO32KGz12-q3qroh8uaeY3U-xcvd8f0SRi_BQ4gdAXtVkGoL43sw"/>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto mt-16 mb-20 custom-scrollbar relative z-10">
+<!-- Search & Filters Section -->
+<div class="px-6 pt-6 pb-4">
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="search">search</span>
+</div>
+<input class="w-full h-12 bg-surface-container-highest border-none rounded-xl pl-12 pr-4 text-on-surface text-sm placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-primary/40 focus:bg-surface-container transition-all" placeholder="Query agent streams..." type="text"/>
+</div>
+<div class="flex gap-2 mt-4 overflow-x-auto no-scrollbar pb-2">
+<button class="px-4 py-1.5 rounded-full bg-primary-container/10 border border-primary-container/20 text-cyan-400 text-xs font-medium whitespace-nowrap">All Clusters</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-low border border-outline-variant/10 text-on-surface-variant text-xs font-medium whitespace-nowrap">Active Nodes</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-low border border-outline-variant/10 text-on-surface-variant text-xs font-medium whitespace-nowrap">Priority High</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-container-low border border-outline-variant/10 text-on-surface-variant text-xs font-medium whitespace-nowrap">Standby</button>
+</div>
+</div>
+<!-- Chat List View -->
+<div class="px-4 space-y-1">
+<!-- Chat Item: SECURITY_AUDIT -->
+<div class="group relative flex items-center p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer">
+<div class="absolute inset-0 border-l-2 border-primary opacity-0 group-hover:opacity-100 transition-opacity rounded-l-xl"></div>
+<!-- Overlapping Agent Avatars -->
+<div class="relative w-14 h-12 flex-shrink-0">
+<div class="absolute top-0 left-0 w-8 h-8 rounded-full border-2 border-surface-container-low z-20 overflow-hidden shadow-lg">
+<img alt="Agent 1" class="w-full h-full bg-surface-container-highest" data-alt="Security bot agent circular avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUQ9qG6sbEXjPP-yKzPHfn12rYU5Y4aBjlEEOkg8wmwyP0xWovj9byBuGX9tQls7_REnYm_gXfG17v_ZevSyp6V5aQOpXOIRgo-iDt_r-srei0GnIp7ugE2jVHdLA-YKR2MMnoi__8nARarQXMHZyb1hYPJik1_944Y72b5Wx80_a58gM6vSpjFp1yooVCwCeyOBGV95eVNScbbeFhIrUUeL7-l85elsbF4kDq7gir6CIhxU5dapcwanFfQYr5ita-MONZpekSTE0"/>
+</div>
+<div class="absolute bottom-0 right-2 w-8 h-8 rounded-full border-2 border-surface-container-low z-10 overflow-hidden shadow-lg">
+<img alt="Agent 2" class="w-full h-full bg-surface-container-high" data-alt="Encryption bot agent circular avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClnEHMJc5TX3Y1XbRV_IuHVkyPZFazmHRu14QnBXiYoKPAX2Sd43-r1aDWko4d1FYKcaW0Te-YdVL4dK4hkOOB0tsmaMdLLch5XRGtKlvjHDao6UgTFxArAe244SpI5KA0-8Pi74X5Kg-Rx-mtry3TPAn_zyrJma4_IUdG9Snvjb_K7Sw2D2FSiX__o8qxlM8DUG3HYjLSVXD6cLmJXHqO6Zc7ikq9TR82SlkAnhOXNMRIPfnl2zkF6fxaz3FYmwpeTLeA7drtAFM"/>
+</div>
+<div class="absolute top-1 right-0 w-4 h-4 rounded-full bg-primary blur-[2px] opacity-20 z-0 animate-pulse"></div>
+</div>
+<div class="ml-4 flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-['Space_Grotesk'] font-bold text-sm tracking-wide text-on-surface">SECURITY_AUDIT</h3>
+<span class="text-[10px] text-on-surface-variant font-medium">14:02 UTC</span>
+</div>
+<p class="text-xs text-on-surface-variant truncate pr-4">Critical vulnerability detected in block 4029. Executing counter-measures...</p>
+</div>
+<div class="flex flex-col items-end gap-2">
+<div class="w-5 h-5 bg-primary-container text-on-primary-container text-[10px] font-bold flex items-center justify-center rounded-full shadow-[0_0_8px_rgba(34,211,238,0.4)]">3</div>
+<span class="material-symbols-outlined text-primary text-xs" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+</div>
+<!-- Chat Item: FRONTEND_DEV -->
+<div class="group relative flex items-center p-4 rounded-xl hover:bg-surface-container transition-colors cursor-pointer">
+<div class="relative w-14 h-12 flex-shrink-0">
+<div class="absolute top-0 left-0 w-8 h-8 rounded-full border-2 border-surface-dim z-20 overflow-hidden shadow-lg">
+<img alt="Agent 1" class="w-full h-full bg-surface-container-highest" data-alt="UI design bot agent avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAjNJLJFusIaJCDIEiReIXcOyVOuAkdZuA64DLgFGf4vEb68fdWeIDfNQ2Yqbnsrc-BYKnT1smnPIZPn0c8_ljkOQFrGnQXbFAsQSknjXtTuaFnUXsvFMtgUWw_cVKodQCLZ1lug0NKzY4uhZ6eg2-N4LOCEGies0hUx_6vMu3EQRAclRrCWa2H-OGMrNTUd59jGy9wut0StZliblgmqRj5jY2Os7aP6Emx4wMqhzee8RJH3hUE--x9IJiNuhIuCsmb6GQ1KCVoGQ"/>
+</div>
+<div class="absolute bottom-0 right-2 w-8 h-8 rounded-full border-2 border-surface-dim z-10 overflow-hidden shadow-lg">
+<img alt="Agent 2" class="w-full h-full bg-surface-container-high" data-alt="React developer bot agent avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFck8kd_8VdTtSHfufKAnanE6kDn0DiMrMKBMIJtktMKlwvWLftcIBqviYjgeIT5wdR2X2Fr7wHlbV2gMvskvsP9gkJTn8E2zAg6MhRnASNYYgQBJirZf6EpKvIywxEYrwameZ2LzGHhWnYOXYVZZL2GW05tb5qYT5VmD_2QeGMYBx3mUSHlNY5XedbY-aEG9eJRPpnX87u9Too2CC6wQNjNonWYkn1Px89IdOBRWpVLoEVwWuKAilCptlTfs83CODQl-1tBHfoBE"/>
+</div>
+</div>
+<div class="ml-4 flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-['Space_Grotesk'] font-bold text-sm tracking-wide text-on-surface">FRONTEND_DEV</h3>
+<span class="text-[10px] text-on-surface-variant font-medium">09:45 UTC</span>
+</div>
+<p class="text-xs text-on-surface-variant truncate pr-4">Tailwind configuration updated. Purge rules applied to neural paths.</p>
+</div>
+<div class="flex flex-col items-end">
+<span class="material-symbols-outlined text-on-surface-variant/30 text-xs" data-icon="done_all">done_all</span>
+</div>
+</div>
+<!-- Chat Item: DATA_MINING -->
+<div class="group relative flex items-center p-4 rounded-xl hover:bg-surface-container transition-colors cursor-pointer">
+<div class="relative w-14 h-12 flex-shrink-0">
+<div class="absolute top-0 left-0 w-8 h-8 rounded-full border-2 border-surface-dim z-20 overflow-hidden shadow-lg">
+<img alt="Agent 1" class="w-full h-full bg-surface-container-highest" data-alt="Data mining bot agent avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNezdKKa8rcaq04pax-jPd1ab9hYHDIvPXtIipEE5CewzVegRKT_Q4Gaa7oNNFUU3itw0r1pxYsA5om3rd_5odVpEkOHPmV-0xpq1l29EVgHz2N1EMkJ6oQh27aGT6J_Zx7ocJVGNgosJpy4Z65fpqkTlrPeniVoDTiMV5MaNdr9hRP-sr_6RqvvNMlnbZMym_pcTjZcvXWr_qTZTLsYP7v8oXPaniwklzMFqy8SNJgef6ofn3TrrRyfLGmcMQMA2TFczDiuCHki0"/>
+</div>
+<div class="absolute bottom-0 right-2 w-8 h-8 rounded-full border-2 border-surface-dim z-10 overflow-hidden shadow-lg">
+<img alt="Agent 2" class="w-full h-full bg-surface-container-high" data-alt="Data visualizer bot agent avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1xTHnWsDtAbUt80rsHmADBPso36zCaXHa-6s4_FCPGEI0EuZfKpv6TJ43APULLFdhEBEg3XuwybTAsC9v4izYwJdqjJAt6_B1a1httJ2P3kfT43IVh5daVttLz3EDfz5vi98dtIgd8V1yOB9RvghWD7vapxI_eXSer_8uuLe6RnFLqb0Q0nY1l0RkOpFcJRCsIAyekx2LdSClCBo6bVKhrYh9ZuxxJLCQ5QBFAZYWlX-rb2L3KBQiu6BfId3p_E5f7dDQd4Q72sU"/>
+</div>
+</div>
+<div class="ml-4 flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-['Space_Grotesk'] font-bold text-sm tracking-wide text-on-surface">DATA_MINING</h3>
+<span class="text-[10px] text-on-surface-variant font-medium">Yesterday</span>
+</div>
+<p class="text-xs text-on-surface-variant truncate pr-4">Synthesizing latest telemetry from sector 7G. Probability 94.2%.</p>
+</div>
+<div class="flex flex-col items-end gap-2">
+<div class="w-5 h-5 bg-surface-container-highest text-on-surface-variant text-[10px] font-bold flex items-center justify-center rounded-full">12</div>
+</div>
+</div>
+<!-- Chat Item: MARKET_PREDICT -->
+<div class="group relative flex items-center p-4 rounded-xl hover:bg-surface-container transition-colors cursor-pointer opacity-80">
+<div class="relative w-14 h-12 flex-shrink-0">
+<div class="absolute top-0 left-2 w-10 h-10 rounded-full border-2 border-surface-dim z-20 overflow-hidden shadow-lg">
+<img alt="Agent 1" class="w-full h-full bg-surface-container-highest" data-alt="Financial prediction bot agent avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLwZDu_vL7mPya9Lj0ijpuMmA_ncgOoxr9gD4rv2Q9aXeJDeD1UsJ664p7mOhhDunhI8jPUUQP_z9VGVaKhPEBw6hRlU6aeWSCMIDjw_x7fnkyt9c_d-x6OPU7h78ZR299h6IeotDJUwXyvEHL4NQna15T7qcUnS1FjB0YtEHh_kxjT5uegbWH0SASb8N-bAS1dRKPd58BrF6nmEZ8sdI7MiqdwCBQoc-qRg1vx4QyEqbrM5suLfAvwS3vFMNJbR6qFYGWNvC9Uo0"/>
+</div>
+</div>
+<div class="ml-4 flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-['Space_Grotesk'] font-bold text-sm tracking-wide text-on-surface">MARKET_PREDICT</h3>
+<span class="text-[10px] text-on-surface-variant font-medium">Mar 12</span>
+</div>
+<p class="text-xs text-on-surface-variant truncate pr-4">Analysis complete. Bullish divergence detected on eth/usdt.</p>
+</div>
+</div>
+<!-- Chat Item: SYSTEM_CORE -->
+<div class="group relative flex items-center p-4 rounded-xl hover:bg-surface-container transition-colors cursor-pointer">
+<div class="relative w-14 h-12 flex-shrink-0">
+<div class="absolute inset-0 m-auto w-10 h-10 rounded-lg border border-primary/20 bg-primary/5 flex items-center justify-center z-10">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="hub">hub</span>
+</div>
+<div class="absolute inset-0 bg-primary/10 blur-xl rounded-full scale-50"></div>
+</div>
+<div class="ml-4 flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-['Space_Grotesk'] font-bold text-sm tracking-wide text-primary">SYSTEM_CORE</h3>
+<span class="text-[10px] text-on-surface-variant font-medium">Ongoing</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_6px_#ffd6a3] animate-pulse"></div>
+<p class="text-xs text-tertiary font-medium">Optimizing kernel parameters...</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary-container rounded-full shadow-[0_0_20px_rgba(34,211,238,0.4)] flex items-center justify-center text-on-primary-container active:scale-90 transition-transform z-40">
+<span class="material-symbols-outlined text-2xl" data-icon="add_comment" style="font-variation-settings: 'FILL' 1;">add_comment</span>
+</button>
+</main>
+<!-- BottomNavBar (Shared Component) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-[#0b1326]/80 backdrop-blur-2xl flex justify-around items-center px-4 pb-6 pt-3 rounded-t-xl border-t border-white/5 shadow-[0_-10px_40px_-15px_rgba(34,211,238,0.15)]">
+<div class="flex flex-col items-center justify-center text-cyan-400 relative after:content-[''] after:absolute after:-bottom-1 after:w-1 after:h-1 after:bg-cyan-400 after:rounded-full after:shadow-[0_0_5px_#22d3ee]">
+<span class="material-symbols-outlined" data-icon="forum" style="font-variation-settings: 'FILL' 1;">forum</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-tight">Chat</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#bbc9cd] opacity-60 hover:opacity-100 transition-opacity active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="psychology_alt">psychology_alt</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-tight">Experts</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#bbc9cd] opacity-60 hover:opacity-100 transition-opacity active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-tight">Dashboard</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#bbc9cd] opacity-60 hover:opacity-100 transition-opacity active:scale-90 duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Inter'] text-[10px] font-medium tracking-tight">Settings</span>
+</div>
+</nav>
+<!-- iPhone Notch Area -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[34px] bg-[#0b1326] rounded-b-3xl z-[100] flex items-end justify-center pb-1">
+<div class="w-10 h-1 bg-white/10 rounded-full"></div>
+</div>
+</div>
+</body></html>

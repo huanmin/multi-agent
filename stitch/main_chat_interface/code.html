@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NEURAL_WEAVER | Multi-Agent AI Collaboration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-error": "#690005",
+                "surface-container": "#171f33",
+                "surface-container-low": "#131b2e",
+                "primary-fixed-dim": "#2fd9f4",
+                "on-surface-variant": "#bbc9cd",
+                "on-tertiary-container": "#6e4600",
+                "surface": "#0b1326",
+                "surface-container-highest": "#2d3449",
+                "inverse-primary": "#006877",
+                "on-secondary": "#233144",
+                "on-primary-fixed-variant": "#004e5a",
+                "surface-container-high": "#222a3d",
+                "background": "#0b1326",
+                "tertiary-fixed": "#ffddb5",
+                "secondary": "#b9c7e0",
+                "tertiary-container": "#ffb13b",
+                "on-secondary-fixed-variant": "#3a485c",
+                "on-error-container": "#ffdad6",
+                "on-background": "#dae2fd",
+                "surface-container-lowest": "#060e20",
+                "on-primary-container": "#005763",
+                "primary-fixed": "#a2eeff",
+                "inverse-on-surface": "#283044",
+                "on-tertiary": "#462b00",
+                "error-container": "#93000a",
+                "on-primary": "#00363e",
+                "outline-variant": "#3c494c",
+                "on-secondary-container": "#abb9d2",
+                "primary-container": "#22d3ee",
+                "surface-tint": "#2fd9f4",
+                "on-tertiary-fixed": "#2a1800",
+                "on-surface": "#dae2fd",
+                "on-primary-fixed": "#001f25",
+                "on-tertiary-fixed-variant": "#643f00",
+                "tertiary": "#ffd6a3",
+                "surface-bright": "#31394d",
+                "inverse-surface": "#dae2fd",
+                "secondary-fixed": "#d5e3fd",
+                "outline": "#859397",
+                "error": "#ffb4ab",
+                "surface-dim": "#0b1326",
+                "surface-variant": "#2d3449",
+                "secondary-container": "#3c4a5e",
+                "primary": "#8aebff",
+                "on-secondary-fixed": "#0d1c2f",
+                "secondary-fixed-dim": "#b9c7e0",
+                "tertiary-fixed-dim": "#ffb957"
+              },
+              fontFamily: {
+                "headline": ["Space Grotesk"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0b1326;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #31394d;
+            border-radius: 10px;
+        }
+        .grid-bg {
+            background-image: radial-gradient(#3c494c 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body overflow-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Grid Background Layer -->
+<div class="fixed inset-0 grid-bg opacity-5 pointer-events-none"></div>
+<div class="flex h-screen w-full relative z-10">
+<!-- Predicted Component: SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col h-screen w-64 border-r border-cyan-500/10 bg-[#131b2e]/60 backdrop-blur-xl shadow-[20px_0_50px_-12px_rgba(34,211,238,0.08)]">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center shadow-[0_0_15px_rgba(34,211,238,0.4)]">
+<span class="material-symbols-outlined text-on-primary-container text-xl" style="font-variation-settings: 'FILL' 1;">hub</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)] font-headline">NEURAL_WEAVER</h1>
+<p class="font-['Space_Grotesk'] tracking-wider text-[10px] text-primary/60">V.2.04 Active</p>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="relative mb-8 group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm group-focus-within:text-cyan-400 transition-colors">search</span>
+<input class="w-full bg-surface-container-highest/40 border-none rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-cyan-500/50 backdrop-blur-md placeholder:text-on-surface-variant/50" placeholder="Search systems..." type="text"/>
+</div>
+<!-- Main Navigation -->
+<nav class="space-y-1">
+<div class="text-cyan-400 bg-gradient-to-r from-cyan-500/20 to-transparent border-l-2 border-cyan-400 flex items-center gap-3 px-4 py-3 cursor-pointer group transition-all duration-300">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">hub</span>
+<span class="font-['Space_Grotesk'] tracking-wider text-sm">Neural Hub</span>
+</div>
+<div class="text-[#bbc9cd] hover:text-cyan-200 hover:bg-white/5 flex items-center gap-3 px-4 py-3 cursor-pointer group transition-all duration-300">
+<span class="material-symbols-outlined">psychology_alt</span>
+<span class="font-['Space_Grotesk'] tracking-wider text-sm">Agent Matrix</span>
+</div>
+<div class="text-[#bbc9cd] hover:text-cyan-200 hover:bg-white/5 flex items-center gap-3 px-4 py-3 cursor-pointer group transition-all duration-300">
+<span class="material-symbols-outlined">database</span>
+<span class="font-['Space_Grotesk'] tracking-wider text-sm">Knowledge Base</span>
+</div>
+<div class="text-[#bbc9cd] hover:text-cyan-200 hover:bg-white/5 flex items-center gap-3 px-4 py-3 cursor-pointer group transition-all duration-300">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-['Space_Grotesk'] tracking-wider text-sm">Telemetry</span>
+</div>
+</nav>
+<div class="mt-8">
+<h3 class="font-headline text-[10px] uppercase tracking-[0.2em] text-on-surface-variant/60 mb-4 px-4">Active Agents</h3>
+<div class="space-y-4 px-4">
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="relative">
+<img class="w-8 h-8 rounded-full border border-primary/20 p-0.5" data-alt="Cybernetic face abstract AI representation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDR7Q481PmVo25WV7w5ofykYYpxlP8MXfowoEI2OWX8Xw8d-bzBb5PsR574co-IAjixiR2IBUjJmgPJzuTal1VQbvSpIxOxFpg-yvFGREF6-uiXtsn35krlJoMefJzK-YiYRiPEsLYvit0nZLWM-R8mqqTG3zZKh9zadoUzxQl2wMKSqftl4sJjBTRAOJ6tSpX5BaEENGRN5PCQoWwZlZXvNiALC5Gn6B7UB34hbLnffUcY4dfYmeFh2IKEAyvN3DUm85c6-jnCt0Q"/>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-primary rounded-full border-2 border-surface shadow-[0_0_8px_#8aebff]"></div>
+</div>
+<div>
+<p class="text-xs font-medium text-on-surface group-hover:text-cyan-400 transition-colors">LOGIC_GATE</p>
+<p class="text-[10px] text-on-surface-variant/70">Reasoning Engine</p>
+</div>
+</div>
+<div class="flex items-center gap-3 group cursor-pointer">
+<div class="relative">
+<img class="w-8 h-8 rounded-full border border-tertiary/20 p-0.5" data-alt="Abstract neural network structure" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAKnnqqkNHMMrG-pAW_5bDkEA_yW0LUP_FDUFGuYv1kIu9D7A6QwuVfeZnveFcrBLOCaad6lwrcGINWdcsKoZs-xC2g6plKuxISRRDhG9z6WI1_BwfV5Kb6vhRcA9AqsZa3dcUIwCJ2Xf8ykgjTMF90vZXrQ85Dr5knvYd84Xo3osyy_-ryR1qf2F2Fx_2NWeVy7rFTQCwqxwVr3T9K5VdqTxWDhgcQwvmADtfQcXSIUW9Is5IfqdIbei2PTJLqpVur0487cVCHr4"/>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-tertiary rounded-full border-2 border-surface shadow-[0_0_8px_#ffd6a3]"></div>
+</div>
+<div>
+<p class="text-xs font-medium text-on-surface group-hover:text-tertiary transition-colors">SYNTAX_REAPER</p>
+<p class="text-[10px] text-on-surface-variant/70">Code Analysis</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto p-6 space-y-4">
+<button class="w-full bg-primary-container text-on-primary-container py-2.5 rounded-xl font-headline text-xs font-bold tracking-widest uppercase flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-[0_0_20px_rgba(34,211,238,0.2)]">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+                    Deploy Agent
+                </button>
+<div class="flex items-center justify-between px-2">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-cyan-400 cursor-pointer text-xl">account_circle</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-cyan-400 cursor-pointer text-xl">sensors</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-cyan-400 cursor-pointer text-xl">settings</span>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 ml-64 flex flex-col bg-surface overflow-hidden relative">
+<!-- Predicted Component: TopAppBar -->
+<header class="flex items-center justify-between px-8 w-full h-16 sticky top-0 z-40 bg-[#0b1326]/80 backdrop-blur-md">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_#8aebff]"></span>
+<h2 class="font-headline font-black text-cyan-400 tracking-wider">PROJECT_NEBULA</h2>
+</div>
+<div class="flex gap-6 border-l border-outline-variant/30 pl-6">
+<a class="font-['Inter'] uppercase tracking-widest text-[10px] text-cyan-400 border-b border-cyan-400 py-1" href="#">Workspace</a>
+<a class="font-['Inter'] uppercase tracking-widest text-[10px] text-[#bbc9cd] hover:text-cyan-300 transition-all" href="#">Logs</a>
+<a class="font-['Inter'] uppercase tracking-widest text-[10px] text-[#bbc9cd] hover:text-cyan-300 transition-all" href="#">Network</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex gap-3 px-4 py-1.5 rounded-full bg-surface-container-low border border-outline-variant/10 items-center">
+<span class="text-[10px] font-headline tracking-widest text-on-surface-variant">OPERATOR: ADMIN_X</span>
+<div class="w-6 h-6 rounded-full overflow-hidden border border-primary/30">
+<img class="w-full h-full object-cover" data-alt="User profile operator avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-OKyOxNh9YXnk0k8MIcb02v6iwHarc7MKHvhLynvXhaItR1kfwuhkQLoqHl-hqi9t-juLyP9DRfekq01yvpc-MFEMA9sd3MaHbg9uu110OLyi_XBczwnQJLMjO4byxcBTIM1HGckUvt6G1ARNpVNfQVk0LpyEpp6FoD8NXSrA-Wb6zwo2Yu0tq58GAfmEb885TtCUiREnxWhoA99eJvszkdT9UE_sXd3pVCQfEG2aENkmvz5uldlXshwkS1HrpbzPiiffCYw0sK4"/>
+</div>
+</div>
+<button class="bg-primary/10 text-primary border border-primary/20 px-4 py-1.5 rounded-lg text-[10px] font-headline font-bold uppercase tracking-widest hover:bg-primary/20 transition-all">
+                        Execute Protocol
+                    </button>
+<div class="flex gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined p-2 hover:bg-white/5 rounded-lg cursor-pointer text-xl transition-all">notifications_active</span>
+<span class="material-symbols-outlined p-2 hover:bg-white/5 rounded-lg cursor-pointer text-xl transition-all">terminal</span>
+</div>
+</div>
+</header>
+<!-- Chat Scroll Area -->
+<div class="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-10">
+<!-- System Message -->
+<div class="flex justify-center">
+<div class="bg-surface-container-high/50 px-4 py-1.5 rounded-full border border-outline-variant/10">
+<p class="text-[10px] font-headline tracking-[0.2em] text-on-surface-variant uppercase">Initializing multi-agent session // ID: 982-AX-0</p>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex justify-end ml-24">
+<div class="max-w-2xl bg-primary-container text-on-primary-container p-4 rounded-2xl rounded-tr-none shadow-[0_10px_30px_-10px_rgba(34,211,238,0.3)]">
+<p class="text-sm font-medium leading-relaxed">System, I need a comprehensive security audit of our decentralized storage nodes. Coordinate between LOGIC_GATE for the logic flaws and SYNTAX_REAPER for the code vulnerabilities. Display parallel findings.</p>
+<div class="mt-2 flex items-center justify-end gap-2 opacity-60">
+<span class="text-[9px] font-headline uppercase tracking-widest">Sent 14:02:11</span>
+<span class="material-symbols-outlined text-xs">done_all</span>
+</div>
+</div>
+</div>
+<!-- Parallel Agent Response Grid -->
+<div class="grid grid-cols-2 gap-6 relative">
+<!-- SVG Neural Connector (Absolute positioning behind) -->
+<div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5 bg-gradient-to-r from-transparent via-primary/20 to-transparent z-0"></div>
+<!-- Agent 1: Logic Gate -->
+<div class="relative z-10 bg-surface-container-low border border-outline-variant/5 rounded-2xl p-6 backdrop-blur-sm group hover:border-primary/20 transition-all duration-500">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full border-2 border-primary/40 p-0.5">
+<img class="w-full h-full rounded-full object-cover" data-alt="AI Reasoning Agent portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRlebYootSpw07dppZc7P-R9cjBXokL2jsCc7FpziftL-s1A-wzRx6V42mT86bm1I_6FflFEVw4Y9h3P3aEdsiDV7AHd7uGK24R17TTDmLcAv0vDFwbcEmV2y3N0xBtcz6F2HASWlbzuuv2pfr1wlULOfRNv1biH0Y8CXqF-1KoiIwrKPeEVEbwMUZl_YftU-jxT1JihXEN7MUgQMONtnOHpBLrd9jrmfLM4lH3tc-nvTySO8pkLqkmvFhLu8RudTmXcPUFdvpj4M"/>
+</div>
+<div>
+<span class="bg-primary/10 text-primary text-[10px] font-headline font-bold px-2 py-0.5 rounded tracking-widest uppercase">Logic_Gate</span>
+<p class="text-[10px] text-on-surface-variant font-headline tracking-widest mt-0.5">STRATEGIC_REASONING</p>
+</div>
+</div>
+<div class="space-y-3 text-sm text-on-surface-variant leading-relaxed">
+<p>Analyzing high-level protocol logic. Preliminary scan suggests <span class="text-primary">3 critical architectural bottlenecks</span> in the consensus layer.</p>
+<div class="bg-surface-container-highest/50 p-3 rounded-lg border border-outline-variant/10 font-mono text-xs">
+                                1. Metadata Exposure in P2P Handshake<br/>
+                                2. Potential Sybil Vulnerability at Node 04<br/>
+                                3. Delayed Block Finalization Logic
+                            </div>
+</div>
+</div>
+<!-- Agent 2: Syntax Reaper -->
+<div class="relative z-10 bg-surface-container-low border border-outline-variant/5 rounded-2xl p-6 backdrop-blur-sm group hover:border-tertiary/20 transition-all duration-500">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-10 h-10 rounded-full border-2 border-tertiary/40 p-0.5">
+<img class="w-full h-full rounded-full object-cover" data-alt="AI Coding Agent portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3sYhsTacg5mY5PEDShmNnzmX1iZGvgafE2Bl2LlHeOeSkr5yuanTWjZ6B4uS0ATm9PU_yUmn8NGkFIuKh5Q_eSnP2CdVbWKI0H6XAMHyopVtsAhfjkw0w6_NzGofWWgMAIDyffI5KpadyE1latF5DHcjF6SvvZvGCNbr2BRRod7eYONPtambMfyPt4oDOaD8k4RTNLkQapoalaKIXQkmlSlnTuajF2t1C9AozZJ5Vrb_LE83TzlYb4G0w1-IPlpqP1avJwf1Xjr8"/>
+</div>
+<div>
+<span class="bg-tertiary/10 text-tertiary text-[10px] font-headline font-bold px-2 py-0.5 rounded tracking-widest uppercase">Syntax_Reaper</span>
+<p class="text-[10px] text-on-surface-variant font-headline tracking-widest mt-0.5">VULNERABILITY_SCAN</p>
+</div>
+</div>
+<div class="space-y-3 text-sm text-on-surface-variant leading-relaxed">
+<p>Executing static analysis on Rust-based storage controllers. Identified <span class="text-tertiary">2 buffer overflows</span> in the legacy buffer allocation module.</p>
+<div class="bg-surface-container-highest/50 p-3 rounded-lg border border-outline-variant/10 font-mono text-xs">
+                                CRITICAL: fn process_payload(data: &amp;[u8])<br/>
+                                Potential out-of-bounds at line 242.<br/>
+                                Mitigation: Implementing bounded slice checks.
+                            </div>
+</div>
+</div>
+</div>
+<!-- Collaborative Conclusion Card -->
+<div class="bg-gradient-to-br from-surface-container-high/80 to-surface-container-low/40 border border-primary/10 rounded-3xl p-8 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-all">
+<span class="material-symbols-outlined text-8xl">verified_user</span>
+</div>
+<h3 class="font-headline font-bold text-lg mb-4 text-on-surface tracking-tight flex items-center gap-2">
+<span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                        Unified Security Assessment
+                    </h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6 max-w-xl">
+                        The combined findings indicate a critical surface risk between the P2P handshake and the memory buffer allocation. We recommend a phased patch deployment starting with the Node 04 isolation.
+                    </p>
+<div class="flex gap-4">
+<button class="bg-primary/10 text-primary px-6 py-2 rounded-xl text-xs font-headline font-bold tracking-widest uppercase border border-primary/20 hover:bg-primary/20 transition-all">Generate Report</button>
+<button class="bg-surface-container-highest text-on-surface-variant px-6 py-2 rounded-xl text-xs font-headline font-bold tracking-widest uppercase hover:text-on-surface transition-all">Export JSON</button>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-8 pt-0 mt-auto bg-gradient-to-t from-surface via-surface to-transparent">
+<div class="max-w-4xl mx-auto relative group">
+<div class="absolute -inset-0.5 bg-gradient-to-r from-primary/30 to-tertiary/30 rounded-2xl blur opacity-20 group-focus-within:opacity-50 transition duration-1000"></div>
+<div class="relative bg-surface-container-low/90 backdrop-blur-xl rounded-2xl border border-outline-variant/20 p-2">
+<textarea class="w-full bg-transparent border-none text-on-surface text-sm focus:ring-0 resize-none min-h-[60px] max-h-48 py-4 px-6 placeholder:text-on-surface-variant/40 custom-scrollbar" placeholder="Type a message or use @ to mention an agent..." rows="1"></textarea>
+<div class="flex items-center justify-between px-4 pb-2">
+<div class="flex gap-2">
+<button class="p-2 hover:bg-white/5 rounded-lg text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined text-xl">attach_file</span>
+</button>
+<button class="p-2 hover:bg-white/5 rounded-lg text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">alternate_email</span>
+</button>
+<button class="p-2 hover:bg-white/5 rounded-lg text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined text-xl">mic</span>
+</button>
+</div>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-xl flex items-center gap-2 font-headline font-bold text-xs tracking-widest uppercase shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+<span>Send</span>
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+</div>
+<div class="text-center mt-4">
+<p class="text-[10px] font-headline tracking-widest text-on-surface-variant/40 uppercase">Latency: 14ms | Tokens: 1.2k / 128k | Multi-Agent Mode Active</p>
+</div>
+</div>
+</main>
+<!-- Right Panel: Telemetry & Dashboard -->
+<aside class="w-80 h-full border-l border-cyan-500/10 bg-[#0b1326]/40 backdrop-blur-md p-6 flex flex-col gap-6">
+<div>
+<h3 class="font-headline text-[10px] uppercase tracking-[0.2em] text-cyan-400 mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">monitoring</span>
+                    System Telemetry
+                </h3>
+<!-- Bento Grid Mini Cards -->
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/5">
+<p class="text-[9px] font-headline text-on-surface-variant uppercase tracking-widest mb-1">Compute</p>
+<p class="text-xl font-headline font-bold text-on-surface">82%</p>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full w-[82%] shadow-[0_0_8px_#8aebff]"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-4 rounded-2xl border border-outline-variant/5">
+<p class="text-[9px] font-headline text-on-surface-variant uppercase tracking-widest mb-1">Memory</p>
+<p class="text-xl font-headline font-bold text-on-surface">4.1GB</p>
+<div class="w-full bg-surface-container-highest h-1 rounded-full mt-2 overflow-hidden">
+<div class="bg-tertiary h-full w-[45%] shadow-[0_0_8px_#ffd6a3]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Token Usage Chart Visual -->
+<div class="flex-1 bg-surface-container-low rounded-2xl border border-outline-variant/5 p-4 flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<p class="text-[9px] font-headline text-on-surface-variant uppercase tracking-widest">Token Distribution</p>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">more_horiz</span>
+</div>
+<div class="flex-1 flex items-end gap-2 pb-2">
+<div class="w-full bg-primary/20 h-1/2 rounded-t-sm relative group cursor-pointer hover:bg-primary/40 transition-all">
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-primary text-on-primary text-[8px] px-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">12k</div>
+</div>
+<div class="w-full bg-primary/30 h-3/4 rounded-t-sm relative group cursor-pointer hover:bg-primary/40 transition-all"></div>
+<div class="w-full bg-primary/20 h-2/3 rounded-t-sm relative group cursor-pointer hover:bg-primary/40 transition-all"></div>
+<div class="w-full bg-primary/60 h-full rounded-t-sm relative group cursor-pointer hover:bg-primary/80 transition-all"></div>
+<div class="w-full bg-primary/40 h-1/2 rounded-t-sm relative group cursor-pointer hover:bg-primary/40 transition-all"></div>
+<div class="w-full bg-primary/20 h-1/3 rounded-t-sm relative group cursor-pointer hover:bg-primary/40 transition-all"></div>
+<div class="w-full bg-primary/30 h-1/2 rounded-t-sm relative group cursor-pointer hover:bg-primary/40 transition-all"></div>
+</div>
+<div class="pt-4 border-t border-outline-variant/10">
+<div class="flex justify-between text-[10px] text-on-surface-variant font-headline tracking-widest">
+<span>EST. COST</span>
+<span class="text-on-surface">$0.042 / HR</span>
+</div>
+</div>
+</div>
+<!-- Quick Access Tools -->
+<div class="space-y-3">
+<p class="text-[9px] font-headline text-on-surface-variant uppercase tracking-[0.2em] mb-4">Neural Tools</p>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all cursor-pointer group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">auto_fix_high</span>
+<span class="text-xs font-headline font-medium">Refine Context</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all cursor-pointer group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary group-hover:scale-110 transition-transform">history_edu</span>
+<span class="text-xs font-headline font-medium">Prompt Library</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Status Card -->
+<div class="mt-auto bg-surface-container-highest/50 p-4 rounded-2xl border border-primary/20">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">verified</span>
+<p class="text-xs font-headline font-bold text-on-surface tracking-widest uppercase">Encryption: AES-256</p>
+</div>
+<p class="text-[10px] text-on-surface-variant leading-relaxed">Neural channel is secured using quantum-resistant layers. Session data is transient.</p>
+</div>
+</aside>
+</div>
+</body></html>

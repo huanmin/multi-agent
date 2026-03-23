@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #22d3ee;
+        }
+        .subtitle {
+            font-size: 18px;
+            color: #94a3b8;
+            margin-bottom: 40px;
+        }
+        .status {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: #1e293b;
+            padding: 20px 30px;
+            border-radius: 12px;
+            min-width: 200px;
+        }
+        .card h3 {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .card .value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #22d3ee;
+        }
+        .experts {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .expert-badge {
+            background: #1e293b;
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid #334155;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Multi-Agent Platform</h1>
+        <p class="subtitle">AI Multi-Agent Collaboration Platform</p>
+
+        <div class="status">
+            <div class="card">
+                <h3>Experts</h3>
+                <div class="value" id="expert-count">Loading...</div>
+            </div>
+            <div class="card">
+                <h3>Conversations</h3>
+                <div class="value">0</div>
+            </div>
+            <div class="card">
+                <h3>Status</h3>
+                <div class="value" style="color: #4ade80;">Online</div>
+            </div>
+        </div>
+
+        <div class="experts" id="experts-list">
+            <!-- Experts will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        // Simple script to test Tauri IPC
+        async function loadExperts() {
+            try {
+                // Try to call Tauri command if available
+                if (window.__TAURI__) {
+                    const experts = await window.__TAURI__.core.invoke('get_experts');
+                    document.getElementById('expert-count').textContent = experts.length;
+
+                    const list = document.getElementById('experts-list');
+                    list.innerHTML = '';
+                    experts.forEach(expert => {
+                        const badge = document.createElement('div');
+                        badge.className = 'expert-badge';
+                        badge.textContent = expert.name;
+                        list.appendChild(badge);
+                    });
+                } else {
+                    document.getElementById('expert-count').textContent = '6';
+                    document.getElementById('experts-list').innerHTML = `
+                        <div class="expert-badge">架构师</div>
+                        <div class="expert-badge">前端专家</div>
+                        <div class="expert-badge">后端专家</div>
+                        <div class="expert-badge">安全专家</div>
+                        <div class="expert-badge">代码审查</div>
+                        <div class="expert-badge">测试专家</div>
+                    `;
+                }
+            } catch (e) {
+                console.error('Failed to load experts:', e);
+                document.getElementById('expert-count').textContent = 'Error';
+            }
+        }
+
+        loadExperts();
+    </script>
+</body>
+</html>

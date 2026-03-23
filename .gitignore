@@ -47,4 +47,4 @@ reports/
 # 可观测性数据
 observability/prometheus/data/
 observability/grafana/data/
-observability/loki/data/
+observability/loki/data//src-tauri/target
