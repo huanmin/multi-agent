@@ -5,12 +5,16 @@
  * 确保所有实现都遵守领域层定义的接口契约
  */
 
-import { describe } from 'vitest';
+import { describe, beforeEach, afterEach } from 'vitest';
 import { runExpertRepositoryContractTests } from './expert.repository.contract.test';
 import { runConversationRepositoryContractTests } from './conversation.repository.contract.test';
 import { runLLMProviderContractTests } from './llm-provider.contract.test';
 import { InMemoryExpertRepository } from '@infrastructure/repositories/expert.repository';
 import { InMemoryConversationRepository } from '@infrastructure/repositories/conversation.repository';
+import { SQLiteExpertRepository } from '@infrastructure/repositories/sqlite/expert.repository';
+import { SQLiteConversationRepository } from '@infrastructure/repositories/sqlite/conversation.repository';
+import { LocalStorageExpertRepository } from '@infrastructure/repositories/localstorage/expert.repository';
+import { LocalStorageConversationRepository } from '@infrastructure/repositories/localstorage/conversation.repository';
 import {
   ILLMProvider,
   LLMResponse,
@@ -72,11 +76,65 @@ class MockLLMProvider implements ILLMProvider {
  * 运行所有契约测试
  */
 describe('Contract Tests', () => {
-  // Expert Repository 契约测试
-  runExpertRepositoryContractTests(() => new InMemoryExpertRepository());
+  describe('InMemory Implementations', () => {
+    // Expert Repository 契约测试
+    runExpertRepositoryContractTests(() => new InMemoryExpertRepository());
 
-  // Conversation Repository 契约测试
-  runConversationRepositoryContractTests(() => new InMemoryConversationRepository());
+    // Conversation Repository 契约测试
+    runConversationRepositoryContractTests(() => new InMemoryConversationRepository());
+  });
+
+  describe('LocalStorage Implementations', () => {
+    beforeEach(() => {
+      // 清除 localStorage
+      localStorage.clear();
+    });
+
+    afterEach(() => {
+      localStorage.clear();
+    });
+
+    describe('Expert Repository', () => {
+      runExpertRepositoryContractTests(() => new LocalStorageExpertRepository());
+    });
+
+    describe('Conversation Repository', () => {
+      runConversationRepositoryContractTests(() => new LocalStorageConversationRepository());
+    });
+  });
+
+  // SQLite 实现（在浏览器环境中可用）
+  describe.skip('SQLite Implementations', () => {
+    describe('Expert Repository', () => {
+      let repository: SQLiteExpertRepository;
+
+      beforeEach(async () => {
+        repository = new SQLiteExpertRepository();
+        await repository.initialize();
+      });
+
+      afterEach(async () => {
+        await repository.close();
+      });
+
+      runExpertRepositoryContractTests(() => repository);
+    });
+
+    describe('Conversation Repository', () => {
+      let repository: SQLiteConversationRepository;
+
+      beforeEach(async () => {
+        repository = new SQLiteConversationRepository();
+        await repository.initialize();
+      });
+
+      afterEach(async () => {
+        await repository.close();
+      });
+
+      runConversationRepositoryContractTests(() => repository);
+    });
+  });
 
   // LLM Provider 契约测试
   runLLMProviderContractTests(() => new MockLLMProvider());

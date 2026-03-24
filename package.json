@@ -54,6 +54,7 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
+    "@tauri-apps/api": "^2.10.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.7.0",
@@ -62,6 +63,7 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.2",
+    "sql.js": "^1.14.1",
     "tailwindcss": "^4.2.2",
     "vite": "^5.4.21",
     "zustand": "^5.0.12"
