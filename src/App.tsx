@@ -4,6 +4,8 @@ import { Welcome } from './presentation/pages/Welcome';
 import { ExpertManager } from './presentation/pages/ExpertManager';
 import { Chat } from './presentation/pages/Chat';
 import { CodeReview } from './presentation/pages/CodeReview';
+import { ConflictResolution } from './presentation/pages/ConflictResolution';
+import { Settings } from './presentation/pages/Settings';
 import { Layout } from './presentation/components/Layout';
 
 // 包装组件以使用 useNavigate
@@ -49,12 +51,42 @@ function App() {
           }
         />
 
+        {/* 对话列表 */}
+        <Route
+          path="/conversations"
+          element={
+            <Layout>
+              <Chat />
+            </Layout>
+          }
+        />
+
         {/* 代码审查 */}
         <Route
           path="/code-review"
           element={
             <Layout>
               <CodeReview />
+            </Layout>
+          }
+        />
+
+        {/* 冲突解决 */}
+        <Route
+          path="/conflicts"
+          element={<ConflictResolution />}
+        />
+        <Route
+          path="/conflict/:conflictId"
+          element={<ConflictResolution />}
+        />
+
+        {/* 设置 */}
+        <Route
+          path="/settings"
+          element={
+            <Layout>
+              <Settings />
             </Layout>
           }
         />

@@ -13,6 +13,7 @@ export interface Message {
   role?: 'user' | 'assistant' | 'system';
   content: string;
   expertId?: string;
+  expertName?: string;
   mentions?: string[];
   inputTokens?: number;
   outputTokens?: number;
@@ -34,6 +35,7 @@ class MessageStore {
       role: message.role || 'user',
       content: message.content || '',
       expertId: message.expertId,
+      expertName: message.expertName,
       mentions: message.mentions || [],
       inputTokens: message.inputTokens || 0,
       outputTokens: message.outputTokens || 0,
