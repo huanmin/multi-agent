@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { Dashboard } from './presentation/pages/Dashboard';
 import { Welcome } from './presentation/pages/Welcome';
 import { ExpertManager } from './presentation/pages/ExpertManager';
@@ -6,12 +6,18 @@ import { Chat } from './presentation/pages/Chat';
 import { CodeReview } from './presentation/pages/CodeReview';
 import { Layout } from './presentation/components/Layout';
 
+// 包装组件以使用 useNavigate
+function WelcomeWithNavigation() {
+  const navigate = useNavigate();
+  return <Welcome onComplete={() => navigate('/dashboard')} />;
+}
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         {/* 欢迎引导页 */}
-        <Route path="/welcome" element={<Welcome onComplete={() => window.location.href = '/dashboard'} />} />
+        <Route path="/welcome" element={<WelcomeWithNavigation />} />
 
         {/* Dashboard */}
         <Route
