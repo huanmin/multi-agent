@@ -1,19 +1,23 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Expert, ExpertRole } from '@domain/expert';
 import { IExpertRepository, InMemoryExpertRepository } from '@infrastructure/repositories/expert.repository';
-import { CreateExpertUseCase, UpdateExpertUseCase, CloneExpertUseCase } from '@application/use-cases/expert.use-case';
+import { CreateExpertUseCase, UpdateExpertUseCase, CloneExpertUseCase, GetExpertsUseCase, SearchExpertsUseCase } from '@application/use-cases/expert.use-case';
 
 describe('Expert Use Cases', () => {
   let repository: IExpertRepository;
   let createUseCase: CreateExpertUseCase;
   let updateUseCase: UpdateExpertUseCase;
   let cloneUseCase: CloneExpertUseCase;
+  let getExpertsUseCase: GetExpertsUseCase;
+  let searchExpertsUseCase: SearchExpertsUseCase;
 
   beforeEach(() => {
     repository = new InMemoryExpertRepository();
     createUseCase = new CreateExpertUseCase(repository);
     updateUseCase = new UpdateExpertUseCase(repository);
     cloneUseCase = new CloneExpertUseCase(repository);
+    getExpertsUseCase = new GetExpertsUseCase(repository);
+    searchExpertsUseCase = new SearchExpertsUseCase(repository);
   });
 
   describe('CreateExpertUseCase', () => {
@@ -135,6 +139,67 @@ describe('Expert Use Cases', () => {
       });
 
       expect(result.success).toBe(false);
+    });
+  });
+
+  describe('GetExpertsUseCase', () => {
+    it('应该获取所有专家', async () => {
+      await createUseCase.execute({
+        name: '专家1',
+        roleCode: 'ARCHITECT',
+        systemPrompt: '提示词1',
+      });
+      await createUseCase.execute({
+        name: '专家2',
+        roleCode: 'DEVELOPER',
+        systemPrompt: '提示词2',
+      });
+
+      const result = await getExpertsUseCase.execute();
+
+      expect(result.success).toBe(true);
+      expect(result.data).toHaveLength(2);
+    });
+
+    it('没有专家时返回空数组', async () => {
+      const result = await getExpertsUseCase.execute();
+
+      expect(result.success).toBe(true);
+      expect(result.data).toHaveLength(0);
+    });
+  });
+
+  describe('SearchExpertsUseCase', () => {
+    it('应该根据关键词搜索专家', async () => {
+      await createUseCase.execute({
+        name: '安全专家',
+        roleCode: 'SECURITY',
+        systemPrompt: '安全审查',
+      });
+      await createUseCase.execute({
+        name: '架构师',
+        roleCode: 'ARCHITECT',
+        systemPrompt: '架构设计',
+      });
+
+      const result = await searchExpertsUseCase.execute('安全');
+
+      expect(result.success).toBe(true);
+      expect(result.data).toHaveLength(1);
+      expect(result.data![0].name).toBe('安全专家');
+    });
+
+    it('空搜索返回所有专家', async () => {
+      await createUseCase.execute({
+        name: '专家1',
+        roleCode: 'SECURITY',
+        systemPrompt: '提示词',
+      });
+
+      const result = await searchExpertsUseCase.execute('');
+
+      expect(result.success).toBe(true);
+      expect(result.data).toHaveLength(1);
     });
   });
 });

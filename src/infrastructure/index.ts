@@ -30,13 +30,13 @@ export { ClaudeProvider } from './services/llm/claude.provider';
 export { OpenAIProvider } from './services/llm/openai.provider';
 
 // ==================== Stores ====================
-export { ConversationStore } from './stores/conversation.store';
-export { MessageStore } from './stores/message.store';
+export { conversationStore, createConversationStore, useConversationStore } from './stores/conversation.store';
+export { messageStore, createMessageStore, useMessageStore } from './stores/message.store';
 
 // ==================== Utils ====================
 export { estimateTokens } from './utils/tokens';
-export { formatTimeAgo } from './utils/time';
-export { renderMarkdown } from './utils/markdown';
+export { formatTime, formatDateTime } from './utils/time';
+export { parseMarkdown } from './utils/markdown';
 
 // ==================== Config ====================
 export interface InfrastructureConfig {

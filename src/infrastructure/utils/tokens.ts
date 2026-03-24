@@ -23,7 +23,7 @@ export function estimateTokens(text: string): number {
   let i = 0;
 
   while (i < text.length) {
-    const char = text[i];
+    const char = text[i]!;
     const code = char.charCodeAt(0);
 
     // 中文字符 (CJK Unified Ideographs)
@@ -41,7 +41,7 @@ export function estimateTokens(text: string): number {
       // 收集连续的英文单词
       let word = '';
       while (i < text.length) {
-        const c = text[i];
+        const c = text[i]!;
         const cc = c.charCodeAt(0);
         // 继续收集 ASCII 字母、数字和部分标点
         if ((cc >= 0x20 && cc <= 0x7e) && cc !== 0x20) {

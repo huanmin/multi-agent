@@ -104,4 +104,19 @@ describe('ExpertManager Page', () => {
       expect(screen.getByText('新专家')).toBeInTheDocument();
     });
   });
+
+  it('应该显示克隆按钮', async () => {
+    render(<ExpertManager />);
+
+    // 鼠标悬停在专家卡片上显示克隆按钮
+    const architectCard = screen.getByText('架构师');
+    await userEvent.hover(architectCard);
+
+    // 验证克隆按钮存在（通过查找包含"克隆"的按钮）
+    await waitFor(() => {
+      const buttons = screen.getAllByRole('button');
+      const hasCloneButton = buttons.some(btn => btn.textContent?.includes('克隆'));
+      expect(hasCloneButton).toBe(true);
+    });
+  });
 });

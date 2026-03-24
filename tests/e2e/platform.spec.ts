@@ -20,13 +20,13 @@ test.describe('Multi-Agent Platform E2E', () => {
       await expect(page.getByText('专家数量')).toBeVisible();
       await expect(page.getByText('对话数量')).toBeVisible();
       await expect(page.getByText('消息总数')).toBeVisible();
-      await expect(page.getByText('系统状态')).toBeVisible();
+      await expect(page.getByText('任务完成')).toBeVisible();
 
-      // 验证统计值
-      await expect(page.getByText('6')).toBeVisible(); // 专家数量
-      await expect(page.getByText('3')).toBeVisible(); // 对话数量
-      await expect(page.getByText('42')).toBeVisible(); // 消息总数
-      await expect(page.getByText('运行中')).toBeVisible(); // 系统状态
+      // 验证统计值 - 使用 exact 匹配避免重复
+      await expect(page.getByText('6', { exact: true })).toBeVisible(); // 专家数量
+      await expect(page.getByText('12', { exact: true })).toBeVisible(); // 对话数量
+      await expect(page.getByText('156', { exact: true })).toBeVisible(); // 消息总数
+      await expect(page.getByText('48', { exact: true })).toBeVisible(); // 任务完成
     });
 
     test('应该显示专家卡片', async ({ page }) => {

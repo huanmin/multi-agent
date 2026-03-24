@@ -73,7 +73,7 @@ export const Dashboard: React.FC = () => {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
       dates.push({
-        date: date.toISOString().split('T')[0],
+        date: date.toISOString().split('T')[0]!,
         input: Math.floor(Math.random() * 10000) + 5000,
         output: Math.floor(Math.random() * 6000) + 3000,
       });

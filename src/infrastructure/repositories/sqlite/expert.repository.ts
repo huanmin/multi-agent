@@ -9,11 +9,12 @@ import { Expert, ExpertRole } from '@domain/expert';
 import type { IExpertRepository } from '../expert.repository';
 
 interface Database {
-  exec(sql: string): void;
-    run(sql: string, params?: unknown[]): void;
-    get(sql: string, params?: unknown[]): unknown;
-    all(sql: string, params?: unknown[]): unknown[];
-    close(): void;
+  run(sql: string, params?: unknown[]): void;
+  exec(sql: string): Array<{ columns: string[]; values: unknown[][] }>;
+  get(sql: string, params?: unknown[]): unknown;
+  all(sql: string, params?: unknown[]): unknown[];
+  close(): void;
+  export(): Uint8Array;
 }
 
 /**
@@ -34,10 +35,10 @@ export class SQLiteExpertRepository implements IExpertRepository {
     // 动态导入 sql.js（只在需要时加载）
     const initSqlJs = (await import('sql.js')).default;
     const SQL = await initSqlJs({
-      locateFile: (file) => `https://sql.js.org/dist/${file}`,
+      locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
     });
 
-    this.db = new SQL.Database();
+    this.db = new SQL.Database() as unknown as Database;
     await this.createTables();
     this.initialized = true;
   }
@@ -83,7 +84,7 @@ export class SQLiteExpertRepository implements IExpertRepository {
       tags: JSON.stringify(expert.tags),
       temperature: expert.temperature,
       max_tokens: expert.maxTokens,
-      is_active: expert.isActive ? 1 : 0,
+      is_active: expert.isActive() ? 1 : 0,
       created_at: expert.createdAt.toISOString(),
       updated_at: expert.updatedAt.toISOString(),
     };
@@ -137,7 +138,7 @@ export class SQLiteExpertRepository implements IExpertRepository {
       case 'QA':
         return ExpertRole.QA();
       default:
-        return ExpertRole.CUSTOM(name);
+        return ExpertRole.CUSTOM();
     }
   }
 
@@ -257,10 +258,10 @@ export class SQLiteExpertRepository implements IExpertRepository {
   async import(data: Uint8Array): Promise<void> {
     const initSqlJs = (await import('sql.js')).default;
     const SQL = await initSqlJs({
-      locateFile: (file) => `https://sql.js.org/dist/${file}`,
+      locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
     });
 
-    this.db = new SQL.Database(data);
+    this.db = new SQL.Database(data) as unknown as Database;
     this.initialized = true;
   }
 }

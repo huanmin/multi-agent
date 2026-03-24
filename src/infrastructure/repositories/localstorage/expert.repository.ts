@@ -116,7 +116,7 @@ export class LocalStorageExpertRepository implements IExpertRepository {
       case 'QA':
         return ExpertRole.QA();
       default:
-        return ExpertRole.CUSTOM(name);
+        return ExpertRole.CUSTOM();
     }
   }
 

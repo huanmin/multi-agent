@@ -13,11 +13,12 @@ import {
 import type { IConversationRepository } from '../conversation.repository';
 
 interface Database {
-  exec(sql: string): void;
-    run(sql: string, params?: unknown[]): void;
-    get(sql: string, params?: unknown[]): unknown;
-    all(sql: string, params?: unknown[]): unknown[];
-    close(): void;
+  run(sql: string, params?: unknown[]): void;
+  exec(sql: string): Array<{ columns: string[]; values: unknown[][] }>;
+  get(sql: string, params?: unknown[]): unknown;
+  all(sql: string, params?: unknown[]): unknown[];
+  close(): void;
+  export(): Uint8Array;
 }
 
 /**
@@ -37,10 +38,10 @@ export class SQLiteConversationRepository implements IConversationRepository {
 
     const initSqlJs = (await import('sql.js')).default;
     const SQL = await initSqlJs({
-      locateFile: (file) => `https://sql.js.org/dist/${file}`,
+      locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
     });
 
-    this.db = new SQL.Database();
+    this.db = new SQL.Database() as unknown as Database;
     await this.createTables();
     this.initialized = true;
   }
@@ -305,10 +306,10 @@ export class SQLiteConversationRepository implements IConversationRepository {
   async import(data: Uint8Array): Promise<void> {
     const initSqlJs = (await import('sql.js')).default;
     const SQL = await initSqlJs({
-      locateFile: (file) => `https://sql.js.org/dist/${file}`,
+      locateFile: (file: string) => `https://sql.js.org/dist/${file}`,
     });
 
-    this.db = new SQL.Database(data);
+    this.db = new SQL.Database(data) as unknown as Database;
     this.initialized = true;
   }
 }

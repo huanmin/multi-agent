@@ -39,6 +39,9 @@ Object.defineProperty(window, 'localStorage', {
   writable: true,
 });
 
+// scrollIntoView mock
+Element.prototype.scrollIntoView = vi.fn();
+
 // 重置所有 mock（每个测试后）
 afterEach(() => {
   vi.clearAllMocks();

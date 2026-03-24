@@ -48,7 +48,7 @@ export function Welcome({ onComplete }: WelcomeProps) {
     onComplete?.();
   };
 
-  const currentStep = steps[step];
+  const currentStep = steps[step]!;
   const isLastStep = step === steps.length - 1;
 
   return (
