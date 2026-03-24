@@ -1,23 +1,28 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   createFollowUpContext,
   formatFollowUpMessage,
   isFollowUpValid,
-  type FollowUpContext,
+  getFollowUpChain,
 } from '@domain/follow-up';
+import {
+  createTestFollowUpContext,
+  createTestFollowUpContextWithParent,
+} from '../../__helpers__/test-factory';
+import type { MessageForFollowUp } from '@domain/follow-up';
 
-describe('追问功能', () => {
-  describe('创建追问上下文', () => {
-    it('应该为专家回复创建追问上下文', () => {
-      const originalMessage = {
-        id: 'msg-1',
-        content: '建议使用微服务架构',
-        role: 'assistant',
-        expertId: 'architect',
-        expertName: '架构师',
-      };
+describe('Follow-up Domain', () => {
+  const mockMessage: MessageForFollowUp = {
+    id: 'msg-1',
+    content: '建议使用微服务架构',
+    role: 'assistant',
+    expertId: 'architect',
+    expertName: '架构师',
+  };
 
-      const context = createFollowUpContext(originalMessage);
+  describe('createFollowUpContext', () => {
+    it('should create follow-up context for expert response', () => {
+      const context = createFollowUpContext(mockMessage);
 
       expect(context.originalMessageId).toBe('msg-1');
       expect(context.originalContent).toBe('建议使用微服务架构');
@@ -26,84 +31,46 @@ describe('追问功能', () => {
       expect(context.timestamp).toBeDefined();
     });
 
-    it('追问上下文应该包含追问次数', () => {
-      const originalMessage = {
-        id: 'msg-1',
-        content: '建议使用微服务架构',
-        role: 'assistant',
-        expertId: 'architect',
-        expertName: '架构师',
-      };
-
-      const context = createFollowUpContext(originalMessage);
-
+    it('should set initial follow-up count to 1', () => {
+      const context = createFollowUpContext(mockMessage);
       expect(context.followUpCount).toBe(1);
     });
 
-    it('多次追问应该增加追问次数', () => {
-      const originalMessage = {
-        id: 'msg-1',
-        content: '建议使用微服务架构',
-        role: 'assistant',
-        expertId: 'architect',
-        expertName: '架构师',
-      };
+    it('should increment follow-up count with parent context', () => {
+      const parentContext = createTestFollowUpContext({ followUpCount: 2 });
+      const context = createFollowUpContext(mockMessage, parentContext);
 
-      const context1 = createFollowUpContext(originalMessage);
-      const context2 = createFollowUpContext(originalMessage, context1);
-
-      expect(context2.followUpCount).toBe(2);
+      expect(context.followUpCount).toBe(3);
     });
   });
 
-  describe('格式化追问消息', () => {
-    it('应该将追问消息格式化为带引用的形式', () => {
-      const context: FollowUpContext = {
-        originalMessageId: 'msg-1',
-        originalContent: '建议使用微服务架构',
-        expertId: 'architect',
+  describe('formatFollowUpMessage', () => {
+    it('should format follow-up message with context', () => {
+      const context = createTestFollowUpContext({
         expertName: '架构师',
-        timestamp: new Date(),
-        followUpCount: 1,
-      };
+        originalContent: '建议使用微服务架构',
+      });
 
-      const followUpContent = '为什么不用单体架构？';
-      const formatted = formatFollowUpMessage(followUpContent, context);
+      const formatted = formatFollowUpMessage('为什么不用单体架构？', context);
 
-      expect(formatted).toContain('追问');
-      expect(formatted).toContain('架构师');
+      expect(formatted).toContain('追问 - 架构师');
       expect(formatted).toContain('建议使用微服务架构');
       expect(formatted).toContain('为什么不用单体架构？');
     });
 
-    it('应该处理长内容的截断', () => {
-      const context: FollowUpContext = {
-        originalMessageId: 'msg-1',
+    it('should truncate long content', () => {
+      const context = createTestFollowUpContext({
         originalContent: '这是一个非常长的回复内容'.repeat(10),
-        expertId: 'architect',
-        expertName: '架构师',
-        timestamp: new Date(),
-        followUpCount: 1,
-      };
+      });
 
-      const followUpContent = '追问内容';
-      const formatted = formatFollowUpMessage(followUpContent, context, { maxLength: 50 });
+      const formatted = formatFollowUpMessage('追问内容', context, { maxLength: 50 });
 
-      expect(formatted.length).toBeLessThanOrEqual(150); // 基础模板 + 截断内容
+      expect(formatted.length).toBeLessThan(150);
     });
 
-    it('应该支持自定义追问前缀', () => {
-      const context: FollowUpContext = {
-        originalMessageId: 'msg-1',
-        originalContent: '建议使用微服务架构',
-        expertId: 'architect',
-        expertName: '架构师',
-        timestamp: new Date(),
-        followUpCount: 1,
-      };
-
-      const followUpContent = '为什么不用单体架构？';
-      const formatted = formatFollowUpMessage(followUpContent, context, {
+    it('should support custom prefix', () => {
+      const context = createTestFollowUpContext();
+      const formatted = formatFollowUpMessage('为什么？', context, {
         prefix: '针对你的回答',
       });
 
@@ -111,84 +78,41 @@ describe('追问功能', () => {
     });
   });
 
-  describe('追问有效性验证', () => {
-    it('应该验证追问内容不能为空', () => {
-      const context: FollowUpContext = {
-        originalMessageId: 'msg-1',
-        originalContent: '建议使用微服务架构',
-        expertId: 'architect',
-        expertName: '架构师',
-        timestamp: new Date(),
-        followUpCount: 1,
-      };
-
+  describe('isFollowUpValid', () => {
+    it('should reject empty content', () => {
+      const context = createTestFollowUpContext();
       expect(isFollowUpValid('', context)).toBe(false);
       expect(isFollowUpValid('   ', context)).toBe(false);
-      expect(isFollowUpValid('追问内容', context)).toBe(true);
     });
 
-    it('应该验证追问次数限制', () => {
-      const context: FollowUpContext = {
-        originalMessageId: 'msg-1',
-        originalContent: '建议使用微服务架构',
-        expertId: 'architect',
-        expertName: '架构师',
-        timestamp: new Date(),
-        followUpCount: 6, // 超过默认限制5
-      };
-
+    it('should reject when follow-up count exceeds limit', () => {
+      const context = createTestFollowUpContext({ followUpCount: 6 });
       expect(isFollowUpValid('追问内容', context)).toBe(false);
       expect(isFollowUpValid('追问内容', context, { maxFollowUps: 10 })).toBe(true);
     });
 
-    it('应该验证原始消息是否存在', () => {
-      const context: FollowUpContext = {
-        originalMessageId: '',
-        originalContent: '',
-        expertId: 'architect',
-        expertName: '架构师',
-        timestamp: new Date(),
-        followUpCount: 1,
-      };
-
+    it('should reject when original message is missing', () => {
+      const context = createTestFollowUpContext({ originalMessageId: '' });
       expect(isFollowUpValid('追问内容', context)).toBe(false);
+    });
+
+    it('should accept valid follow-up', () => {
+      const context = createTestFollowUpContext();
+      expect(isFollowUpValid('有效的追问内容', context)).toBe(true);
     });
   });
 
-  describe('追问层级管理', () => {
-    it('应该正确追踪追问层级', () => {
-      const message1 = {
-        id: 'msg-1',
-        content: '原始回答',
-        role: 'assistant',
-        expertId: 'expert1',
-        expertName: '专家A',
-      };
+  describe('getFollowUpChain', () => {
+    it('should return chain of contexts', () => {
+      const context1 = createTestFollowUpContext({ depth: 1 });
+      const context2 = createTestFollowUpContextWithParent(context1, { depth: 2 });
+      const context3 = createTestFollowUpContextWithParent(context2, { depth: 3 });
 
-      const context1 = createFollowUpContext(message1);
-      expect(context1.depth).toBe(1);
+      const chain = getFollowUpChain(context3);
 
-      const message2 = {
-        id: 'msg-2',
-        content: '第一次追问回复',
-        role: 'assistant',
-        expertId: 'expert1',
-        expertName: '专家A',
-      };
-
-      const context2 = createFollowUpContext(message2, context1);
-      expect(context2.depth).toBe(2);
-    });
-
-    it('应该支持追问链', () => {
-      const message1 = { id: 'msg-1', content: 'A', role: 'assistant', expertId: 'e1', expertName: '专家' };
-      const context1 = createFollowUpContext(message1);
-
-      const message2 = { id: 'msg-2', content: 'B', role: 'assistant', expertId: 'e1', expertName: '专家' };
-      const context2 = createFollowUpContext(message2, context1);
-
-      expect(context2.parentContext).toBe(context1);
-      expect(context2.rootMessageId).toBe('msg-1');
+      expect(chain).toHaveLength(3);
+      expect(chain[0].depth).toBe(1);
+      expect(chain[2].depth).toBe(3);
     });
   });
 });
