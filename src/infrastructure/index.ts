@@ -4,9 +4,41 @@
  * 实现领域层定义的接口，提供技术支持
  */
 
-/**
- * 基础设施配置
- */
+// ==================== Repositories ====================
+export {
+  type IExpertRepository,
+  InMemoryExpertRepository,
+} from './repositories/expert.repository';
+
+export {
+  type IConversationRepository,
+  InMemoryConversationRepository,
+} from './repositories/conversation.repository';
+
+export { LocalStorageExpertRepository } from './repositories/localstorage/expert.repository';
+export { LocalStorageConversationRepository } from './repositories/localstorage/conversation.repository';
+
+// ==================== Services ====================
+export {
+  ParallelLLMService,
+  type ILLMProvider,
+  type LLMResponse,
+  type StreamEvent,
+} from './services/llm.service';
+
+export { ClaudeProvider } from './services/llm/claude.provider';
+export { OpenAIProvider } from './services/llm/openai.provider';
+
+// ==================== Stores ====================
+export { ConversationStore } from './stores/conversation.store';
+export { MessageStore } from './stores/message.store';
+
+// ==================== Utils ====================
+export { estimateTokens } from './utils/tokens';
+export { formatTimeAgo } from './utils/time';
+export { renderMarkdown } from './utils/markdown';
+
+// ==================== Config ====================
 export interface InfrastructureConfig {
   database: DatabaseConfig;
   cache: CacheConfig;
@@ -28,6 +60,17 @@ export interface CacheConfig {
 export interface MessagingConfig {
   broker: string;
   topic: string;
+}
+
+// ==================== Observability ====================
+export interface Span {
+  end(): void;
+  setAttribute(key: string, value: unknown): void;
+}
+
+class NoopSpan implements Span {
+  end(): void {}
+  setAttribute(): void {}
 }
 
 /**
@@ -62,14 +105,4 @@ export class ObservabilityClient {
       // 结构化日志
     }
   }
-}
-
-export interface Span {
-  end(): void;
-  setAttribute(key: string, value: unknown): void;
-}
-
-class NoopSpan implements Span {
-  end(): void {}
-  setAttribute(): void {}
 }

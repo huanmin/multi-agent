@@ -95,8 +95,6 @@ export class ParallelLLMService {
         return;
       }
 
-      onEvent({ type: 'start', expertId: expert.id });
-
       try {
         const messages = [
           { role: 'system', content: expert.systemPrompt },
